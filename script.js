@@ -3,15 +3,32 @@ const quoteText = document.getElementById('quote');
 const authorText = document.getElementById('author');
 const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
+const loader = document.getElementById('loader');
 
 
 // Rest-API, let apiQuotes ist für Rest-API notwendig!
 // Ein leeres Array, damit wir später, den Wert ändern können. U.a. deswegen auch let, weil variabel
 let apiQuotes = [];
 
+// Show Loading
+function loading(){
+    // HTML-Attribute hidden will be false
+    loader.hidden = false;
+    quoteContainer.hidden = true;
+}
+
+// Hide Loading
+function complete(){
+    loader.hidden = true;
+    quoteContainer.hidden = false;
+}
+
 
 // Show new Quote Function
 function newQuote() {
+    // Loading, in case it needs longer
+    loading();
+    
     // Pick a random Quote from API-Quotes-Array
     const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
 
@@ -30,13 +47,19 @@ function newQuote() {
         quoteText.classList.remove('long-quote');
     }
 
+
+    // Set Quote, hide Loader
     quoteText.textContent = quote.text;
+    complete();
 }
 
 // Get Quotes From API
 
 //async function can run at anytime independently and won't stop the browser from completing loading the page
 async function getQuotes() {
+    // Loading, in case it needs longer
+    loading();
+
     // Rest-API
     const apiUrl = 'https://type.fit/api/quotes';
 
@@ -75,3 +98,4 @@ twitterBtn.addEventListener('click',tweetQuote);
 
 // On Load 
 getQuotes();
+
